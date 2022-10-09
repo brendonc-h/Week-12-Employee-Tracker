@@ -1,6 +1,5 @@
 const express = require('express');
 const { prompt } = require("inquirer");
-const mysql = require('mysql2');
 const db = require("./db");
 
 
@@ -8,8 +7,8 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 //Express middleware
-app.use(express.urlencoded({ extented: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extented: true }));
+// app.use(express.json());
 
 
 // const db = mysql.createConnection(
@@ -24,7 +23,7 @@ app.use(express.json());
 
 //inquierer for the selections
 const menuSelect = () => {
-    inquirer.prompt([
+    prompt([
         {
             type: "list",
             message: "Select what you want to do.",
@@ -36,54 +35,33 @@ const menuSelect = () => {
                 "Add a department",
                 "Add a role",
                 "Add an employee",
-                "Add a new employee role",
+                "Update an employee role",
                 "Quit"
             ]
         }
     ]).then(res => {
-        let choice = res.choice;
+        let choice = res.menu;
         switch (choice) {
-            case "VIEW_EMPLOYEES":
+            case "Select all employees":
                 viewEmployees();
                 break;
-            case "VIEW_EMPLOYEES_BY_DEPARTMENT":
-                viewEmployeesByDepartment();
-                break;
-            case "VIEW_EMPLOYEES_BY_MANAGER":
-                viewEmployeesByManager();
-                break;
-            case "ADD_EMPLOYEE":
+            case "Add an employee":
                 addEmployee();
                 break;
-            case "REMOVE_EMPLOYEE":
-                removeEmployee();
-                break;
-            case "UPDATE_EMPLOYEE_ROLE":
+            case "Update an employee role":
                 updateEmployeeRole();
                 break;
-            case "UPDATE_EMPLOYEE_MANAGER":
-                updateEmployeeManager();
-                break;
-            case "VIEW_DEPARTMENTS":
+            case "Select all departments":
                 viewDepartments();
                 break;
-            case "ADD_DEPARTMENT":
+            case "Add a department":
                 addDepartment();
                 break;
-            case "REMOVE_DEPARTMENT":
-                removeDepartment();
-                break;
-            case "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT":
-                viewUtilizedBudgetByDepartment();
-                break;
-            case "VIEW_ROLES":
+             case "VIEW_ROLES":
                 viewRoles();
                 break;
             case "ADD_ROLE":
                 addRole();
-                break;
-            case "REMOVE_ROLE":
-                removeRole();
                 break;
             default:
                 quit();
@@ -473,6 +451,7 @@ function addEmployee() {
         })
 }
 
+menuSelect();
 // Exit the application
 function quit() {
     console.log("Goodbye!");
