@@ -10,17 +10,6 @@ const app = express();
 // app.use(express.urlencoded({ extented: true }));
 // app.use(express.json());
 
-
-// const db = mysql.createConnection(
-//     {
-//         host: 'localhost',
-//         user: 'root',
-//         password: 'rootroot',
-//         database: 'departments_db'
-//     },
-//     console.log('Connected to the departments_db database!')
-// );
-
 //inquierer for the selections
 const menuSelect = () => {
     prompt([
@@ -57,10 +46,10 @@ const menuSelect = () => {
             case "Add a department":
                 addDepartment();
                 break;
-             case "VIEW_ROLES":
+             case "Select all roles":
                 viewRoles();
                 break;
-            case "ADD_ROLE":
+            case "Add a role":
                 addRole();
                 break;
             default:
@@ -81,91 +70,7 @@ function viewEmployees() {
         .then(() => menuSelect());
 }
 
-// All employees that belong to a department
-function viewEmployeesByDepartment() {
-    db.findAllDepartments()
-        .then(([rows]) => {
-            let departments = rows;
-            const departmentChoices = departments.map(({ id, name }) => ({
-                name: name,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "departmentId",
-                    message: "Which department would you like to see employees for?",
-                    choices: departmentChoices
-                }
-            ])
-                .then(res => db.findAllEmployeesByDepartment(res.departmentId))
-                .then(([rows]) => {
-                    let employees = rows;
-                    console.log("\n");
-                    console.table(employees);
-                })
-                .then(() => menuSelect())
-        });
-}
-
-
-function viewEmployeesByManager() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let managers = rows;
-            const managerChoices = managers.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "managerId",
-                    message: "Which employee do you want to see direct reports for?",
-                    choices: managerChoices
-                }
-            ])
-                .then(res => db.findAllEmployeesByManager(res.managerId))
-                .then(([rows]) => {
-                    let employees = rows;
-                    console.log("\n");
-                    if (employees.length === 0) {
-                        console.log("The selected employee has no direct reports");
-                    } else {
-                        console.table(employees);
-                    }
-                })
-                .then(() => menuSelect())
-        });
-}
-
-
-function removeEmployee() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let employees = rows;
-            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "employeeId",
-                    message: "Which employee do you want to remove?",
-                    choices: employeeChoices
-                }
-            ])
-                .then(res => db.removeEmployee(res.employeeId))
-                .then(() => console.log("Removed employee from the database"))
-                .then(() => menuSelect())
-        })
-}
-
-
+// update employee role
 function updateEmployeeRole() {
     db.findAllEmployees()
         .then(([rows]) => {
@@ -209,52 +114,10 @@ function updateEmployeeRole() {
         })
 }
 
-// Update an employee's manager
-function updateEmployeeManager() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let employees = rows;
-            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
 
-            prompt([
-                {
-                    type: "list",
-                    name: "employeeId",
-                    message: "Which employee's manager do you want to update?",
-                    choices: employeeChoices
-                }
-            ])
-                .then(res => {
-                    let employeeId = res.employeeId
-                    db.findAllPossibleManagers(employeeId)
-                        .then(([rows]) => {
-                            let managers = rows;
-                            const managerChoices = managers.map(({ id, first_name, last_name }) => ({
-                                name: `${first_name} ${last_name}`,
-                                value: id
-                            }));
 
-                            prompt([
-                                {
-                                    type: "list",
-                                    name: "managerId",
-                                    message:
-                                        "Which employee do you want to set as manager for the selected employee?",
-                                    choices: managerChoices
-                                }
-                            ])
-                                .then(res => db.updateEmployeeManager(employeeId, res.managerId))
-                                .then(() => console.log("Updated employee's manager"))
-                                .then(() => menuSelect())
-                        })
-                })
-        })
-}
 
-//All roles
+//All roles to view
 function viewRoles() {
     db.findAllRoles()
         .then(([rows]) => {
@@ -265,7 +128,7 @@ function viewRoles() {
         .then(() => menuSelect());
 }
 
-// Add a role
+// Add a role to departments
 function addRole() {
     db.findAllDepartments()
         .then(([rows]) => {
@@ -300,30 +163,7 @@ function addRole() {
 }
 
 
-function removeRole() {
-    db.findAllRoles()
-        .then(([rows]) => {
-            let roles = rows;
-            const roleChoices = roles.map(({ id, title }) => ({
-                name: title,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "roleId",
-                    message:
-                        "Which role do you want to remove? (Warning: This will also remove employees)",
-                    choices: roleChoices
-                }
-            ])
-                .then(res => db.removeRole(res.roleId))
-                .then(() => console.log("Removed role from the database"))
-                .then(() => menuSelect())
-        })
-}
-
+//view all the departments availabe
 function viewDepartments() {
     db.findAllDepartments()
         .then(([rows]) => {
@@ -334,7 +174,7 @@ function viewDepartments() {
         .then(() => menuSelect());
 }
 
-// Add a department
+// Add a department to the others
 function addDepartment() {
     prompt([
         {
@@ -350,39 +190,7 @@ function addDepartment() {
         })
 }
 
-function removeDepartment() {
-    db.findAllDepartments()
-        .then(([rows]) => {
-            let departments = rows;
-            const departmentChoices = departments.map(({ id, name }) => ({
-                name: name,
-                value: id
-            }));
-
-            prompt({
-                type: "list",
-                name: "departmentId",
-                message:
-                    "Which department would you like to remove? (Warning: This will also remove associated roles and employees)",
-                choices: departmentChoices
-            })
-                .then(res => db.removeDepartment(res.departmentId))
-                .then(() => console.log(`Removed department from the database`))
-                .then(() => menuSelect())
-        })
-}
-
-// View all departments and show their total utilized department budget
-function viewUtilizedBudgetByDepartment() {
-    db.viewDepartmentBudgets()
-        .then(([rows]) => {
-            let departments = rows;
-            console.log("\n");
-            console.table(departments);
-        })
-        .then(() => menuSelect());
-}
-
+// adding not updating employings
 function addEmployee() {
     prompt([
         {
