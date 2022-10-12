@@ -74,8 +74,11 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 3. Source Database
+    ```sh
+    SOURCE db/schema.sql
     ```
-4.Start app 
+4. Start app 
+    ```sh
     npm start
     ```
 
