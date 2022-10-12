@@ -18,7 +18,6 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contact">Contact</a></li>
     
@@ -30,7 +29,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+
 
 This application allows you to track the employee's that are in a business. You can view the department's, view employee's, view role's, add roles, add employee's, add department's, and update employee role's.
 
