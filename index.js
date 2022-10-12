@@ -149,7 +149,7 @@ function addRole() {
                 },
                 {
                     type: "list",
-                    name: "department_id",
+                    name: "department_key",
                     message: "Which department does the role belong to?",
                     choices: departmentChoices
                 }
@@ -178,7 +178,7 @@ function viewDepartments() {
 function addDepartment() {
     prompt([
         {
-            name: "name",
+            name: "department_name",
             message: "What is the name of the department?"
         }
     ])
@@ -241,8 +241,8 @@ function addEmployee() {
                                     })
                                         .then(res => {
                                             let employee = {
-                                                manager_id: res.managerId,
-                                                role_id: roleId,
+                                                manager_key: res.managerId,
+                                                role_key: roleId,
                                                 first_name: firstName,
                                                 last_name: lastName
                                             }
