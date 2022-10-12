@@ -74,10 +74,10 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 3. Source Database
-    ```sh
+    ```
 4.Start app 
     npm start
-    ```sh
+    ```
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
